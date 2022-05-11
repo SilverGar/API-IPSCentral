@@ -20,6 +20,7 @@ router.post('/api/postEmployeeTeam360/:publish', controllerEmployee.postEmployee
 //<--------RUTAS PARA SUPERUSUARIO------->
 router.post('/api/processFile', controllerFile.fileProcessing)
 router.get('/api/user_getUsers/', controllerUser.getUsers)
+router.get('/api/getUploadProgress', controllerFile.getFileUploadProgress)
 
 
 //<--------RUTAS PARA RECURSOS HUMANOS--->
