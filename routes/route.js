@@ -3,28 +3,35 @@ const { route } = require('express/lib/application');
 const controllerEmployee = require('../controllers/employeeController')
 const controllerUser = require('../controllers/userController')
 const controllerFile = require('../controllers/fileController')
-const controllerHr = require('../controllers/hrController')
+const controllerHr = require('../controllers/hrController');
+const userController = require('../controllers/userController');
 
 const router = express.Router();
 
 
 //<--------RUTAS GENERALES--------------->
 router.get('/api/user_getTeam/:email', controllerEmployee.getUserTeam)
+router.get('/api/getAppUpdate/:email', userController.getUpdate)
+router.get('/api/getAppReceivedUpdate/:email', userController.receivedUpdate)
+router.get('/api/getReleasedStatus', userController.getReleasedStatus)
 
 //<--------RUTAS PARA EMPLEADOS---------->
 //RUTA PARA OBTENER EQUIPO 360
 router.get('/api/getEmployeeEditing/:email', controllerEmployee.getEmployeeEditing)
 router.post('/api/postEmployeeTeam360/:publish', controllerEmployee.postEmployeeTeam360)
 
-
 //<--------RUTAS PARA SUPERUSUARIO------->
 router.post('/api/processFile', controllerFile.fileProcessing)
-router.get('/api/user_getUsers/', controllerUser.getUsers)
+router.get('/api/user_getUsers', controllerUser.getUsers)
 router.get('/api/getUploadProgress', controllerFile.getFileUploadProgress)
+router.get('/api/releaseData', controllerFile.releaseData)
 
 
 //<--------RUTAS PARA RECURSOS HUMANOS--->
-router.get('/api/hr/getUsers', controllerHr.hr_getEmployeeTeam)
+router.get('/api/hr/getUsers', controllerHr.hr_getEmployees)
+router.get('/api/hr/getCompleteTeam/:email', controllerHr.hr_getEmployeeTeam)
+router.post('/api/hr/getConflictData', controllerHr.hr_getConflictData)
+
 
 
 router.get('/api/user_getType/:email', controllerUser.getUserType)

@@ -32,47 +32,45 @@ class MainController{
 
     async postEmployeeTeam360(req, res){
         try{
+            
             for(var i in req.body){
                 if(req.body[i].Reason != null){
                     if(req.body[i].Reason.length > 0){
-                        console.log(req.body[i])
                         const pool = await poolPromise
                         const result = await pool.request()
-                        .input('id', sql.Int, req.body[i].TeamownerID)
+                        .input('id', sql.Int, req.body[i].TeamOwnerID)
                         .input('partnerID', sql.Int, req.body[i].PartnerID)
                         .input('check', sql.Int, req.body[i].Check1)
                         .input('reason', sql.VarChar, req.body[i].Reason)
-                        .input('project', sql.Int, req.body[i].ProjectID)
+                        .input('evalType', sql.Int, req.body[i].EvalType)
                         .input('publish', sql.Int, req.params.publish)
-                        .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, @reason, @project, @publish')
+                        .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, @reason, @evalType, @publish')
                         res.json(result.recordset)
                     }
                     else{
-                        console.log(req.body[i])
                         const pool = await poolPromise
                         const result = await pool.request()
-                        .input('id', sql.Int, req.body[i].TeamownerID)
+                        .input('id', sql.Int, req.body[i].TeamOwnerID)
                         .input('partnerID', sql.Int, req.body[i].PartnerID)
                         .input('check', sql.Int, req.body[i].Check1)
                         .input('reason', sql.VarChar, req.body[i].reason)
-                        .input('project', sql.Int, req.body[i].ProjectID)
+                        .input('evalType', sql.Int, req.body[i].EvalType)
                         .input('publish', sql.Int, req.params.publish)
-                        .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, NULL, @project, @publish')
+                        .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, NULL, @evalType, @publish')
                         res.json(result.recordset)
                     }
                     
                 }
                 else{
-                    console.log(req.body[i])
+                    console.log(req.body)
                     const pool = await poolPromise
                     const result = await pool.request()
-                    .input('id', sql.Int, req.body[i].TeamownerID)
+                    .input('id', sql.Int, req.body[i].TeamOwnerID)
                     .input('partnerID', sql.Int, req.body[i].PartnerID)
                     .input('check', sql.Int, req.body[i].Check1)
-                    .input('reason', sql.VarChar, req.body[i].reason)
-                    .input('project', sql.Int, req.body[i].ProjectID)
+                    .input('evalType', sql.Int, req.body[i].EvalType)
                     .input('publish', sql.Int, req.params.publish)
-                    .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, NULL, @project, @publish')
+                    .query('EXECUTE Employee_UpdateTeam360 @id, @partnerID, @check, NULL, @evalType, @publish')
                     res.json(result.recordset)
                 }
             }

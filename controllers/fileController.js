@@ -330,7 +330,6 @@ class MainController{
                 
                 for(var i in AllTeam360){
                     for(var j in AllTeam360[i].Relationships){
-                        console.log('Horas: ' + AllTeam360[i].Relationships[j].Hours)
                         if(AllTeam360[i].Relationships[j].Hours >= 40){
                             const pool = await poolPromise
                             const result = await pool.request()
@@ -362,16 +361,6 @@ class MainController{
                     .query("EXECUTE updateFileProgress 6")
                 }
 
-                
-
-
-                
-
-
-
-                
-                
-
                 res.send({
                     status: true,
                     message: 'Archivo Cargado Exitosamente'
@@ -398,6 +387,21 @@ class MainController{
         }
     }
 
+    async releaseData(req, res){
+        try{
+            const pool = await poolPromise
+            const result = await pool.request()
+            .query("SU_ReleaseData")
+            res.send({
+                status: true,
+                message: 'Archivo publicado exitosamente.'
+            })
+        }
+        catch(error){
+            res.status(500)
+            res.send(error.message)
+        }
+    }
 
 
 }
