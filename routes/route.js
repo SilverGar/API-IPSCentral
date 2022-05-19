@@ -36,7 +36,5 @@ router.post('/api/hr/getConflictData', controllerHr.hr_getConflictData)
 
 router.get('/api/user_getType/:email', controllerUser.getUserType)
 router.put('/api/updateUserType/:type/:email', controllerUser.updateUserType)
-router.post('/api/createUser', controllerUser.createNewUser)
-router.delete('/api/deleteUser', controllerUser.deleteUser)
 
 module.exports = router;

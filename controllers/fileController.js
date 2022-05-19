@@ -364,7 +364,7 @@ class MainController{
                 res.send({
                     status: true,
                     message: 'Archivo Cargado Exitosamente'
-                })
+                }) 
                 
             }
         }
