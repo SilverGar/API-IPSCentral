@@ -41,10 +41,20 @@ class MainController{
                 let file = req.files.file
                 
                 var csvData = file.data.toString('utf8')
+
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 1")
+                }
+                
+
                 csvData.split("\r\n")
 
-               
-                var AllTeam360 = await csvToJson({
+                var AllTeam360 = [] 
+                var teamList = []
+                var AllPeople = []
+                var processedData = await csvToJson({
                     noheader: true,
                     output: csv,
                     headers: ["Client", "Project", "Leader", "Email", "Person", "B1", "B2", "B3", "B4", "B5", "B6", "NB1", "NB2", "NB3", "NB4", "NB5", "NB6"]
@@ -103,6 +113,10 @@ class MainController{
                             input.push(newPerson)
                         }
                     }
+
+
+
+                    var allPeopleCSV = Object.assign([], input)
                     
                     //==================GET TEAMS====================
                     var currentTeam = input[0].Project
@@ -210,16 +224,6 @@ class MainController{
                     //==================MERGE 360 TEAMS====================
                     var finishedTeams = Object.assign([], finishedTeams)
 
-                    // for(var i in finishedTeams){
-                    //     console.log("\n\nOWNER")
-                    //     console.log("Nombre: " + finishedTeams[i].TeamOwner.User)
-                    //     console.log("Lider: " + finishedTeams[i].TeamOwner.Leader)
-                    //     console.log("MEMBERS")
-                    //     for(var j in finishedTeams[i].Relationships){
-                    //         console.log("Nombre: " + finishedTeams[i].Relationships[j].User)
-                    //         console.log("Evaluacion: " + finishedTeams[i].Relationships[j].EvalType)
-                    //     }
-                    // }
 
                     var mergedTeams = []
                     var currentUser = ""
@@ -256,30 +260,29 @@ class MainController{
                                     }
                                 }
                             }
-                            
                             newTeam360.Relationships = Object.assign([], uniqueRelations) 
                             mergedTeams.push(newTeam360)
 
                         }
                     }
 
-                    // for(var i in mergedTeams){
-                    //     console.log("\n\nTeamOwner")
-                    //     console.log(mergedTeams[i].TeamOwner)
-                    //     console.log("RELATIONSHIPS")
-                    //     for(var j in mergedTeams[i].Relationships){
-                    //         console.log(mergedTeams[i].Relationships[j])
-                    //     }
-                    // }
 
-                    return mergedTeams
+
+                    return [mergedTeams, teamList, allPeopleCSV]
                 })
 
-                console.log(AllTeam360)
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 2")
+                }
+
+                AllTeam360 = Object.assign([], processedData[0])
+                teamList = Object.assign([], processedData[1])
+                AllPeople = Object.assign([], processedData[2])
 
                 // ENVIA PRIMERO TODOS LOS USUARIOS.
                 for(var i in AllTeam360){
-                    console.log("Hola")
                     const pool = await poolPromise
                     const result = await pool.request()
                     .input('user', sql.VarChar, AllTeam360[i].TeamOwner.User)
@@ -287,25 +290,81 @@ class MainController{
                     .query("EXECUTE SU_InsertNewUser @user, @email")
                 }
 
-                //OBTIENE LOS IDs
-                // const pool = await poolPromise
-                // const result = await pool.request()
-                // .input('user', sql.VarChar, AllTeam360[i].TeamOwner.User)
-                // .input('email', sql.VarChar, AllTeam360[i].TeamOwner.Email)
-                // .query("EXECUTE SU_InsertNewUser @user, @email")
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 3")
+                }
+
+                for(var i in teamList){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .input('name', sql.VarChar, teamList[i].ProjectName)
+                    .input('client', sql.VarChar, teamList[i].TeamMembers[0].Client)
+                    .input('leader', sql.VarChar, teamList[i].TeamMembers[0].Email)
+                    .query("EXECUTE SU_InsertProject @name, @client, @leader")
+                }
+
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 4")
+                }
+
+                for(var i in AllPeople){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .input('email', sql.VarChar, AllPeople[i].Email)
+                    .input('project', sql.VarChar, AllPeople[i].Project)
+                    .input('hours', sql.Int, AllPeople[i].Hours)
+                    .query("EXECUTE SU_InsertHours @email, @project, @hours")
+                }
+
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 5")
+                }
 
 
                 
+                for(var i in AllTeam360){
+                    for(var j in AllTeam360[i].Relationships){
+                        if(AllTeam360[i].Relationships[j].Hours >= 40){
+                            const pool = await poolPromise
+                            const result = await pool.request()
+                            .input('ownerEmail', sql.VarChar, AllTeam360[i].TeamOwner.Email)
+                            .input('partnerEmail', sql.VarChar, AllTeam360[i].Relationships[j].Email)
+                            .input('evalType', sql.Int, AllTeam360[i].Relationships[j].EvalType)
+                            .input('proyectName', sql.VarChar, AllTeam360[i].Relationships[j].Project)
+                            .query("EXECUTE SU_InsertTeam360 @ownerEmail, @partnerEmail, @evalType, @proyectName, NULL")
+                        }
+                        else{
+                            var isApproved = 0
+                            const pool = await poolPromise
+                            const result = await pool.request()
+                            .input('ownerEmail', sql.VarChar, AllTeam360[i].TeamOwner.Email)
+                            .input('partnerEmail', sql.VarChar, AllTeam360[i].Relationships[j].Email)
+                            .input('evalType', sql.Int, AllTeam360[i].Relationships[j].EvalType)
+                            .input('proyectName', sql.VarChar, AllTeam360[i].Relationships[j].Project)
+                            .input('approved', sql.Int, isApproved)
+                            .query("EXECUTE SU_InsertTeam360 @ownerEmail, @partnerEmail, @evalType, @proyectName, @approved")
+                        }
 
+                        
+                    }
+                }
 
-
-                
-                
+                if(true){
+                    const pool = await poolPromise
+                    const result = await pool.request()
+                    .query("EXECUTE updateFileProgress 6")
+                }
 
                 res.send({
                     status: true,
                     message: 'Archivo Cargado Exitosamente'
-                })
+                }) 
                 
             }
         }
@@ -315,6 +374,34 @@ class MainController{
         }
     }
 
+    async getFileUploadProgress(req, res){
+        try{
+            const pool = await poolPromise
+            const result = await pool.request()
+            .query("SU_getFileProgress")
+            res.json(result.recordset[0].Status)
+        }
+        catch(error){
+            res.status(500)
+            res.send(error.message)
+        }
+    }
+
+    async releaseData(req, res){
+        try{
+            const pool = await poolPromise
+            const result = await pool.request()
+            .query("SU_ReleaseData")
+            res.send({
+                status: true,
+                message: 'Archivo publicado exitosamente.'
+            })
+        }
+        catch(error){
+            res.status(500)
+            res.send(error.message)
+        }
+    }
 
 
 }

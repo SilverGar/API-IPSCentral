@@ -4,7 +4,7 @@ const config = {
   server: 'localhost',
   user: 'sa',
   password: 'Password_123',
-  database: 'Apricot2',
+  database: 'Apricot',
   options: {
     trustedConnection: true,
     encrypt: true,
