@@ -25,6 +25,7 @@ router.post('/api/processFile', controllerFile.fileProcessing)
 router.get('/api/user_getUsers', controllerUser.getUsers)
 router.get('/api/getUploadProgress', controllerFile.getFileUploadProgress)
 router.get('/api/releaseData', controllerFile.releaseData)
+router.delete('/api/su/deleteDatabase', controllerFile.resetData)
 
 
 //<--------RUTAS PARA RECURSOS HUMANOS--->

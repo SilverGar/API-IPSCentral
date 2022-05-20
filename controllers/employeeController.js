@@ -8,6 +8,7 @@ class MainController{
             const result = await pool.request()
             .input('email', sql.VarChar, req.params.email)
             .query("EXECUTE Employee_GetTeam @email")
+            console.log(result.recordset)
             res.json(result.recordset)
         }
         catch(error){
