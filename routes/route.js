@@ -25,6 +25,7 @@ router.post('/api/processFile', controllerFile.fileProcessing)
 router.get('/api/user_getUsers', controllerUser.getUsers)
 router.get('/api/getUploadProgress', controllerFile.getFileUploadProgress)
 router.get('/api/releaseData', controllerFile.releaseData)
+router.delete('/api/su/deleteDatabase', controllerFile.resetData)
 
 
 //<--------RUTAS PARA RECURSOS HUMANOS--->
@@ -38,7 +39,5 @@ router.get('/api/hr/getNotifications/:day/:user', controllerHr.hr_getNotificatio
 
 router.get('/api/user_getType/:email', controllerUser.getUserType)
 router.put('/api/updateUserType/:type/:email', controllerUser.updateUserType)
-router.post('/api/createUser', controllerUser.createNewUser)
-router.delete('/api/deleteUser', controllerUser.deleteUser)
 
 module.exports = router;

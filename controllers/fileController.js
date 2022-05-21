@@ -364,13 +364,26 @@ class MainController{
                 res.send({
                     status: true,
                     message: 'Archivo Cargado Exitosamente'
-                })
+                }) 
                 
             }
         }
         catch(error){
             res.status(500)
             res.send(error.message)
+            try{
+              const pool = await poolPromise
+                  const result = await pool.request()
+                  .query("SU_ResetData")
+                  res.send({
+                      status: true,
+                      message: 'Reset exitoso.'
+                  })
+            }
+            catch(error){
+              res.status(500)
+              res.send(error.message)
+            }
         }
     }
 
@@ -401,6 +414,22 @@ class MainController{
             res.status(500)
             res.send(error.message)
         }
+    }
+
+    async resetData(req, res){
+      try{
+        const pool = await poolPromise
+            const result = await pool.request()
+            .query("SU_ResetData")
+            res.send({
+                status: true,
+                message: 'Reset exitoso.'
+            })
+      }
+      catch(error){
+        res.status(500)
+        res.send(error.message)
+      }
     }
 
 
