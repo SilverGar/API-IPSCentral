@@ -29,6 +29,35 @@ class MainController{
         }
     }
 
+    async HR_GetNotificationsDays(req, res){
+        try{
+            const pool = await poolPromise
+            const result = await pool.request()
+            .input('user', sql.Int, req.params.user)
+            .query("HR_GetNotificationsDays @user")
+            res.json(result.recordset)
+        }
+        catch(error){
+            res.status(500)
+            res.send(error.message)
+        }
+    }
+
+    async hr_getNotifications(req, res){
+        try{
+            const pool = await poolPromise
+            const result = await pool.request()
+            .input('day', sql.Date, req.params.day)
+            .input('user', sql.Int, req.params.user)
+            .query("HR_GetNotifications @day, @user")
+            res.json(result.recordset)
+        }
+        catch(error){
+            res.status(500)
+            res.send(error.message)
+        }
+    }
+
     async hr_getConflictData(req, res){
         try{
             console.log(req.body)

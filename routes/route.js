@@ -31,6 +31,8 @@ router.get('/api/releaseData', controllerFile.releaseData)
 router.get('/api/hr/getUsers', controllerHr.hr_getEmployees)
 router.get('/api/hr/getCompleteTeam/:email', controllerHr.hr_getEmployeeTeam)
 router.post('/api/hr/getConflictData', controllerHr.hr_getConflictData)
+router.get('/api/hr/getNotificationsDays/:user', controllerHr.HR_GetNotificationsDays)
+router.get('/api/hr/getNotifications/:day/:user', controllerHr.hr_getNotifications)
 
 
 

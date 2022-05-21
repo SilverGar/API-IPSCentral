@@ -1,9 +1,9 @@
 const sql = require('mssql')
 
 const config = {
-  server: 'localhost',
-  user: 'sa',
-  password: 'Password_123',
+  server: 'DESKTOP-3CA1G0S',
+  user: 'admin',
+  password: 'Contrasena',
   database: 'Apricot',
   options: {
     trustedConnection: true,
