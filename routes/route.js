@@ -32,6 +32,7 @@ router.delete('/api/su/deleteDatabase', controllerFile.resetData)
 router.get('/api/hr/getUsers', controllerHr.hr_getEmployees)
 router.get('/api/hr/getCompleteTeam/:email', controllerHr.hr_getEmployeeTeam)
 router.post('/api/hr/getConflictData', controllerHr.hr_getConflictData)
+router.post('/api/hr/confirmTeam', controllerHr.hr_confirmTeam)
 
 
 

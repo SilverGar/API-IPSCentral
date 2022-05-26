@@ -271,10 +271,22 @@ class MainController{
                     return [mergedTeams, teamList, allPeopleCSV]
                 })
 
+                //DEFAULT INSERTS
                 if(true){
-                    const pool = await poolPromise
-                    const result = await pool.request()
-                    .query("EXECUTE updateFileProgress 2")
+                  const pool = await poolPromise
+                  const result = await pool.request()
+                  .input('user', sql.VarChar, 'USER DEFAULT')
+                  .input('email', sql.VarChar, 'USER MAIL')
+                  .query("EXECUTE SU_InsertNewUser @user, @email")
+                }
+
+                if(true){
+                  const pool = await poolPromise
+                  const result = await pool.request()
+                  .input('name', sql.VarChar, 'PROJECT')
+                  .input('client', sql.VarChar, 'CLIENT')
+                  .input('leader', sql.VarChar, 'USER MAIL')
+                  .query("EXECUTE SU_InsertProject @name, @client, @leader")
                 }
 
                 AllTeam360 = Object.assign([], processedData[0])
@@ -295,6 +307,7 @@ class MainController{
                     const result = await pool.request()
                     .query("EXECUTE updateFileProgress 3")
                 }
+                
 
                 for(var i in teamList){
                     const pool = await poolPromise
