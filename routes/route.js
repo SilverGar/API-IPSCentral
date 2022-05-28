@@ -26,6 +26,8 @@ router.get('/api/user_getUsers', controllerUser.getUsers)
 router.get('/api/getUploadProgress', controllerFile.getFileUploadProgress)
 router.get('/api/releaseData', controllerFile.releaseData)
 router.delete('/api/su/deleteDatabase', controllerFile.resetData)
+router.post('/api/su/addUser', controllerUser.addUser)
+router.post('/api/su/updateUser', controllerUser.changeUserType)
 
 
 //<--------RUTAS PARA RECURSOS HUMANOS--->
