@@ -115,12 +115,25 @@ class MainController {
                     .input('id', sql.Int, req.body[i].id)
                     .input('status', sql.Int, req.body[i].SU_decision)
                     .query("EXECUTE SU_UpdateUserLevel @id, @status")
-                res.json(result.recordser)
+                res.json(result.recordset)
             }
         } catch (error) {
             res.status(500)
             res.send(error)
         }
+    }
+
+    async DashboardData(req, res){
+      try{
+        const pool = await poolPromise
+        const result = await pool.request()
+            .query("EXECUTE Dashboard_GetStatistic")
+        res.json(result.recordset)
+      }
+      catch(error){
+        res.status(500)
+        res.send(error)
+      }
     }
 }
 

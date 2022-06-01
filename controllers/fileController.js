@@ -382,16 +382,15 @@ class MainController{
             }
         }
         catch(error){
-            res.status(500)
-            res.send(error.message)
+            
             try{
               const pool = await poolPromise
                   const result = await pool.request()
                   .query("SU_ResetData")
-                  res.send({
-                      status: true,
-                      message: 'Reset exitoso.'
-                  })
+                res.send({
+                  status: false,
+                  message: 'Archivo no cargado.'
+               }) 
             }
             catch(error){
               res.status(500)
