@@ -417,10 +417,7 @@ class MainController{
             const pool = await poolPromise
             const result = await pool.request()
             .query("SU_ReleaseData")
-            res.send({
-                status: true,
-                message: 'Archivo publicado exitosamente.'
-            })
+            res.json(result.recordset[0].Status)
         }
         catch(error){
             res.status(500)

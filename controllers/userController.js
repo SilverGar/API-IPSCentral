@@ -135,6 +135,20 @@ class MainController {
         res.send(error)
       }
     }
+
+    async getUserID(req, res){
+      try{
+        const pool = await poolPromise
+        const result = await pool.request()
+        .input('email', sql.VarChar, req.params.email)
+        .query("EXECUTE getUserID @email")
+        res.json(result.recordset[0].ID)
+      }
+      catch(error){
+          res.status(500)
+          res.send(error.message)
+      }
+    }
 }
 
 const userController = new MainController()

@@ -15,9 +15,9 @@ router.get('/api/getAppUpdate/:email', userController.getUpdate)
 router.get('/api/getAppReceivedUpdate/:email', userController.receivedUpdate)
 router.get('/api/getReleasedStatus', userController.getReleasedStatus)
 router.get('/api/general/dashboardStatistic', userController.DashboardData)
+router.get('/api/user/getID/:email', controllerUser.getUserID)
 
 //<--------RUTAS PARA EMPLEADOS---------->
-//RUTA PARA OBTENER EQUIPO 360
 router.get('/api/getEmployeeEditing/:email', controllerEmployee.getEmployeeEditing)
 router.post('/api/postEmployeeTeam360/:publish', controllerEmployee.postEmployeeTeam360)
 
