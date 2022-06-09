@@ -90,9 +90,6 @@ class MainController{
             req.body[i].OwnerCheck = true
           }
           //NOTIFICACIONES
-
-
-
           
           if(req.body[i].Notification.length > 0){
             console.log("\nNotificacion")
@@ -116,10 +113,6 @@ class MainController{
               .query("EXECUTE hr_SolveNotification @sender, @addressee, @evalType, @requestType, @hr_response")
             }
           }
-            
-          
-
-
 
           const pool = await poolPromise
           const result = await pool.request()
@@ -152,6 +145,7 @@ class MainController{
           .input('isApproved', sql.Int, req.body[i].HrDecision)
           .query("EXECUTE ApproveTeam @OwnerID, @PartnerID, @EvalType, @PartnerCheck, @OwnerCheck, @isApproved")
         }
+
         res.send({
           status: true,
           message: 'Exito!.'
